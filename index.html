@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 七堵春節店家資訊</title>
+
+    <meta property="og:title" content="2026 七堵春節店家資訊" />
+    <meta property="og:description" content="過年不知去那買東西？我們幫你整理👌" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ilovecidu.github.io/2026LNY/" />
+    <meta property="og:image" content="https://ilovecidu.github.io/2026LNY/images/meta.jpg" />
+    <meta property="og:image:type" content="image/jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="628" />
+
+    <!-- Line Awesome -->
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- Google Fonts: Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f9f8f6;
+            --card-bg: #ffffff;
+            --text-main: #2c2c2c;
+            --text-sub: #6b6b6b;
+            --accent-red: #e85d7a;
+            --accent-blue: #2a4073;
+            --border-color: #e5e2dd;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 2;
+            padding: 40px 20px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            position: relative;
+            gap: 20px;
+        }
+
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-red);
+            margin: 15px auto 0;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        .search-icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .search-icon-btn:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        .search-bar {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            min-width: 320px;
+        }
+
+        .search-bar.active {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-main);
+        }
+
+        .search-bar input::placeholder {
+            color: #ccc;
+        }
+
+        .search-bar-close {
+            cursor: pointer;
+            color: var(--text-sub);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+
+        .search-bar-close:hover {
+            color: var(--accent-red);
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 35px;
+            overflow-x: auto;
+            padding: 0 5px;
+            scrollbar-width: none;
+        }
+
+        .filter-buttons::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        .filter-btn.active {
+            background: var(--text-main);
+            color: #fff;
+            border-color: var(--text-main);
+        }
+
+        @media (max-width: 600px) {
+            .filter-buttons {
+                gap: 8px;
+                margin-bottom: 25px;
+            }
+
+            .filter-btn {
+                padding: 10px 14px;
+                min-width: 44px;
+                font-size: 13px;
+            }
+
+            .search-bar {
+                min-width: calc(100vw - 60px);
+                right: -15px;
+            }
+        }
+
+        /* Date Tabs */
+        .date-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .date-header::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, transparent, var(--bg-color));
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .date-tabs {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .date-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .date-tab {
+            padding: 5px 0;
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 400;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .date-tab.active {
+            color: var(--accent-red);
+            font-weight: 500;
+        }
+
+        /* Grid - Masonry Layout */
+        .stores-grid {
+            column-count: 3;
+            column-gap: 25px;
+        }
+
+        @media (max-width: 1200px) {
+            .stores-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stores-grid {
+                column-count: 1;
+            }
+        }
+
+        .store-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            break-inside: avoid;
+            margin-bottom: 25px;
+        }
+
+        .store-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .store-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.3;
+            flex-grow: 1;
+        }
+
+        .store-category {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .category-吃 { background: #fdf2f2; color: #e85d7a; }
+        .category-喝 { background: #f0f4f8; color: #2a4073; }
+        .category-玩 { background: #fdf8f2; color: #8a6d3b; }
+        .category-其 { background: #f4f4f4; color: #666666; }
+        .category-醫 { background: #f2fdfa; color: #2d8a7d; }
+
+        .store-info {
+            /* margin-bottom: 20px; */
+            flex-grow: 1;
+        }
+
+        .info-item {
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+        }
+
+        .info-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .info-item a {
+            color: var(--text-sub);
+            text-decoration: none;
+            transition: color 0.2s;
+            word-break: break-all;
+        }
+
+        .info-item a:hover {
+            color: var(--accent-red);
+        }
+
+        /* 備註欄位樣式 */
+        .store-note {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            border-left: 3px solid var(--accent-red);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .store-note i {
+            margin-right: 10px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Schedule */
+        .store-schedule {
+            margin-top: 8px;
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-item.open {
+            color: var(--text-main);
+        }
+
+        .schedule-item.closed {
+            color: #ccc;
+        }
+
+        .schedule-item .date-label {
+            font-weight: 400;
+        }
+
+        .schedule-item .status-text {
+            font-weight: 500;
+        }
+
+        .schedule-item.open .status-text {
+            color: var(--accent-red);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            color: var(--text-sub);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.3rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .social-btn:hover {
+            background: var(--text-main);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .social-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-sub);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            color: var(--accent-red);
+        }
+
+        /* Loading & Error */
+        .loading {
+            text-align: center;
+            padding: 100px 0;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+        }
+
+        .error {
+            background: #fff;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-sub);
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 15px; }
+            h1 { font-size: 1.5rem; }
+            header { margin-bottom: 30px; flex-direction: column; align-items: center; }
+            .header-title { width: 100%; }
+            .search-icon-btn { margin-top: 0; }
+            .stores-grid { grid-template-columns: 1fr; gap: 20px; }
+            .store-card { padding: 20px; }
+            .store-name { font-size: 1.1rem; }
+            .footer { margin-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>2026 七堵春節店家資訊</h1>
+                <div class="subtitle">2026.02.14 - 02.22 營業時間一覽</div>
+            </div>
+            <button class="search-icon-btn" id="searchBtn" title="搜尋">
+                <i class="la la-search"></i>
+            </button>
+            <div class="search-bar" id="searchBar">
+                <i class="la la-search" style="color: var(--text-sub);"></i>
+                <input type="text" id="searchInput" placeholder="搜尋店家名稱...">
+                <span class="search-bar-close" id="searchClose">
+                    <i class="la la-times"></i>
+                </span>
+            </div>
+        </header>
+
+        <div id="loading" class="loading">
+            <i class="la la-spinner la-spin" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+            資料讀取中...
+        </div>
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="content" style="display: none;">
+            <div class="filter-buttons" id="filterButtons">
+                <button class="filter-btn active" data-category="ALL" title="全部">全</button>
+                <button class="filter-btn" data-category="吃" title="吃">吃</button>
+                <button class="filter-btn" data-category="喝" title="喝">喝</button>
+                <button class="filter-btn" data-category="玩" title="玩">玩</button>
+                <button class="filter-btn" data-category="其" title="其他">其</button>
+                <button class="filter-btn" data-category="醫" title="醫療">醫</button>
+            </div>
+
+            <div class="date-header">
+                <div class="date-tabs" id="dateTabs"></div>
+            </div>
+
+            <div class="stores-grid" id="storesGrid"></div>
+        </div>
+
+        <div class="footer">
+            <p>由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 提供資料</p>
+            <p style="margin-top: 8px; opacity: 0.7;">資料如有錯誤或需修正請私訊粉專</p>
+        </div>
+    </div>
+
+    <script>
+        const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
+
+        let storesData = [];
+        let currentCategory = 'ALL';
+        let currentDate = 'ALL';
+
+        async function loadData() {
+            try {
+                const response = await fetch(PUBLISHED_CSV_URL);
+                if (!response.ok) throw new Error('無法讀取資料');
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                if (!rows || rows.length === 0) throw new Error('試算表沒有資料');
+
+                const headers = rows[0];
+                storesData = rows.slice(1).map(row => {
+                    const store = {};
+                    headers.forEach((header, index) => {
+                        store[header] = row[index] || '';
+                    });
+                    return store;
+                }).filter(store => store['店名']);
+
+                // 隨機排序店家資料
+                storesData = shuffleArray(storesData);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+                initializeDateTabs();
+                renderStores();
+                setupDateTabsScroll();
+                setupSearch();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Fisher-Yates 洗牌演算法
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            const result = [];
+            for (let line of lines) {
+                if (!line.trim()) continue;
+                const row = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    const nextChar = line[i + 1];
+                    if (char === '"') {
+                        if (inQuotes && nextChar === '"') {
+                            current += '"';
+                            i++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                row.push(current.trim());
+                result.push(row);
+            }
+            return result;
+        }
+
+        function initializeDateTabs() {
+            const dates = [
+                { id: 'ALL', label: '全部日期' },
+                { id: '02/14', label: '02/14 小年夜' },
+                { id: '02/15', label: '02/15 除夕' },
+                { id: '02/16', label: '02/16 初一' },
+                { id: '02/17', label: '02/17 初二' },
+                { id: '02/18', label: '02/18 初三' },
+                { id: '02/19', label: '02/19 初四' },
+                { id: '02/20', label: '02/20 初五' },
+                { id: '02/21', label: '02/21 初六' },
+                { id: '02/22', label: '02/22 初七' }
+            ];
+            const dateTabs = document.getElementById('dateTabs');
+            
+            // 自動偵測當前日期並選中
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${month}/${day}`;
+            
+            // 判斷今天是否在活動期間
+            const activityDates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
+            const shouldAutoSelect = activityDates.includes(todayStr);
+            const autoSelectDate = shouldAutoSelect ? todayStr : 'ALL';
+            
+            dates.forEach(date => {
+                const tab = document.createElement('div');
+                tab.className = 'date-tab' + (date.id === autoSelectDate ? ' active' : '');
+                tab.textContent = date.label;
+                tab.dataset.date = date.id;
+                tab.addEventListener('click', () => selectDate(date.id));
+                dateTabs.appendChild(tab);
+            });
+            
+            // 設置當前日期並渲染
+            currentDate = autoSelectDate;
+            
+            // 等待 DOM 更新後，自動捲動到選中的日期頁籤
+            setTimeout(() => {
+                const activeTab = dateTabs.querySelector('.date-tab.active');
+                if (activeTab && autoSelectDate !== 'ALL') {
+                    activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 0);
+        }
+
+        function setupDateTabsScroll() {
+            const dateTabs = document.getElementById('dateTabs');
+
+            dateTabs.addEventListener('wheel', (e) => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                    e.preventDefault();
+                    dateTabs.scrollLeft += e.deltaY;
+                }
+            }, { passive: false });
+
+            let startY = 0;
+            dateTabs.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            dateTabs.addEventListener('touchmove', (e) => {
+                const currentY = e.touches[0].clientY;
+                const diff = Math.abs(currentY - startY);
+                if (diff > 5) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+
+        function selectDate(date) {
+            currentDate = date;
+            document.querySelectorAll('.date-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.date === date);
+            });
+            // 捲動到選中的日期
+            const selectedTab = document.querySelector(`[data-date="${date}"]`);
+            if (selectedTab) {
+                selectedTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            renderStores();
+        }
+
+        function renderStores() {
+            const grid = document.getElementById('storesGrid');
+            grid.innerHTML = '';
+            const filteredStores = storesData.filter(store => {
+                if (currentCategory !== 'ALL' && store['分類'] !== currentCategory) return false;
+                if (currentDate !== 'ALL' && (!store[currentDate] || store[currentDate] === '休' || store[currentDate].includes('休'))) return false;
+                return true;
+            });
+            
+            if (filteredStores.length === 0) {
+                grid.innerHTML = '<div class="no-results">找不到相符的店家</div>';
+            } else {
+                filteredStores.forEach(store => {
+                    grid.appendChild(createStoreCard(store));
+                });
+            }
+        }
+
+        function createStoreCard(store) {
+            const card = document.createElement('div');
+            card.className = 'store-card';
+
+            const header = document.createElement('div');
+            header.className = 'store-header';
+            
+            const name = document.createElement('div');
+            name.className = 'store-name';
+            name.textContent = store['店名'] || '未命名';
+            
+            const category = document.createElement('span');
+            category.className = `store-category category-${store['分類'] || '其'}`;
+            category.textContent = store['分類'] || '其他';
+            
+            header.appendChild(name);
+            header.appendChild(category);
+            card.appendChild(header);
+
+            const info = document.createElement('div');
+            info.className = 'store-info';
+
+            if (store['電話']) {
+                const phone = document.createElement('div');
+                phone.className = 'info-item';
+                phone.innerHTML = `<i class="la la-phone"></i><a href="tel:${store['電話']}">${store['電話']}</a>`;
+                info.appendChild(phone);
+            }
+
+            if (store['地址']) {
+                const address = document.createElement('div');
+                address.className = 'info-item';
+                const encodedAddress = encodeURIComponent(store['地址']);
+                address.innerHTML = `<i class="la la-map-marker"></i><a href="https://www.google.com/maps/search/?api=1&query=${encodedAddress}" target="_blank">${store['地址']}</a>`;
+                info.appendChild(address);
+            }
+
+            // 新增備註欄位
+            if (store['備註']) {
+                const note = document.createElement('div');
+                note.className = 'store-note';
+                note.innerHTML = store['備註'];
+                info.appendChild(note);
+            }
+
+            card.appendChild(info);
+
+            // 營業時間表 (放在上方) - 始終顯示完整 9 天資訊
+            const schedule = document.createElement('div');
+            schedule.className = 'store-schedule';
+            const dates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
+            const dateLabels = {'02/14':'小年夜','02/15':'除夕','02/16':'初一','02/17':'初二','02/18':'初三','02/19':'初四','02/20':'初五','02/21':'初六','02/22':'初七'};
+
+            // 始終顯示全部 9 天的營業資訊
+            dates.forEach(date => schedule.appendChild(createScheduleItem(date, store[date], dateLabels[date])));
+            card.appendChild(schedule);
+
+            // 社群連結 (放在下方)
+            const socialLinks = document.createElement('div');
+            socialLinks.className = 'social-links';
+
+            const addSocial = (url, iconClass, title) => {
+                if (url) {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.className = 'social-btn';
+                    a.title = title;
+                    a.innerHTML = `<i class="${iconClass}"></i>`;
+                    socialLinks.appendChild(a);
+                }
+            };
+
+            addSocial(store['線上訂餐'], 'la la-shopping-cart', '線上訂餐');
+            addSocial(store['粉專'] || store['Facebook'], 'la la-facebook', 'Facebook');
+            addSocial(store['LINE'], 'lab la-line', 'LINE');
+            addSocial(store['IG'] || store['Instagram'], 'la la-instagram', 'Instagram');
+            addSocial(store['官網'], 'la la-globe', '官網');
+            addSocial(store['Threads'], 'las la-at', 'Threads');
+
+            if (socialLinks.children.length > 0) card.appendChild(socialLinks);
+
+            return card;
+        }
+
+        function createScheduleItem(date, status, label) {
+            const item = document.createElement('div');
+            item.className = 'schedule-item';
+            const isClosed = !status || status === '休' || status.includes('休');
+            item.classList.add(isClosed ? 'closed' : 'open');
+            
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'date-label';
+            // 始終顯示完整日期格式 (日期 標籤)
+            dateSpan.textContent = `${date} ${label}`;
+            
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'status-text';
+            statusSpan.textContent = isClosed ? '休息' : (status === '營' || status === '正常營業' ? '營業' : status);
+            
+            item.appendChild(dateSpan);
+            item.appendChild(statusSpan);
+            return item;
+        }
+
+        function setupSearch() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchBar = document.getElementById('searchBar');
+            const searchInput = document.getElementById('searchInput');
+            const searchClose = document.getElementById('searchClose');
+            const grid = document.getElementById('storesGrid');
+
+            searchBtn.addEventListener('click', () => {
+                searchBar.classList.add('active');
+                searchInput.focus();
+            });
+
+            searchClose.addEventListener('click', () => {
+                searchBar.classList.remove('active');
+                searchInput.value = '';
+                renderStores();
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const keyword = e.target.value.toLowerCase().trim();
+                if (keyword === '') {
+                    renderStores();
+                    return;
+                }
+
+                const filteredStores = storesData.filter(store => {
+                    if (currentCategory !== 'ALL' && store['分類'] !== currentCategory) return false;
+                    if (currentDate !== 'ALL' && (!store[currentDate] || store[currentDate] === '休' || store[currentDate].includes('休'))) return false;
+                    return store['店名'].toLowerCase().includes(keyword);
+                });
+
+                grid.innerHTML = '';
+                if (filteredStores.length === 0) {
+                    grid.innerHTML = '<div class="no-results">找不到相符的店家</div>';
+                } else {
+                    filteredStores.forEach(store => {
+                        grid.appendChild(createStoreCard(store));
+                    });
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchBar.classList.contains('active')) {
+                    searchBar.classList.remove('active');
+                    searchInput.value = '';
+                    renderStores();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!searchBar.contains(e.target) && !searchBtn.contains(e.target)) {
+                    searchBar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('filterButtons').addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentCategory = e.target.dataset.category;
+                    const searchInput = document.getElementById('searchInput');
+                    searchInput.value = '';
+                    renderStores();
+                }
+            });
+            loadData();
+        });
+    </script>
+</body>
+</html>
