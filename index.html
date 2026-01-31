@@ -679,15 +679,15 @@
         function initializeDateTabs() {
             const dates = [
                 { id: 'ALL', label: '全部日期' },
-                { id: '02/14', label: '02/14 小年夜' },
-                { id: '02/15', label: '02/15 除夕' },
-                { id: '02/16', label: '02/16 初一' },
-                { id: '02/17', label: '02/17 初二' },
-                { id: '02/18', label: '02/18 初三' },
-                { id: '02/19', label: '02/19 初四' },
-                { id: '02/20', label: '02/20 初五' },
-                { id: '02/21', label: '02/21 初六' },
-                { id: '02/22', label: '02/22 初七' }
+                { id: '02/14', label: '02/14 (六) 小年夜' },
+                { id: '02/15', label: '02/15 (日)' },
+                { id: '02/16', label: '02/16 (一) 除夕' },
+                { id: '02/17', label: '02/17 (二) 初一' },
+                { id: '02/18', label: '02/18 (三) 初二' },
+                { id: '02/19', label: '02/19 (四) 初三' },
+                { id: '02/20', label: '02/20 (五) 初四' },
+                { id: '02/21', label: '02/21 (六) 初五' },
+                { id: '02/22', label: '02/22 (日) 初六' }
             ];
             const dateTabs = document.getElementById('dateTabs');
             
@@ -698,7 +698,7 @@
             const day = String(today.getDate()).padStart(2, '0');
             const todayStr = `${month}/${day}`;
             
-            // 判斷今天是否在活動期間
+            // 判斷今天是否在活動期間 (02/14 - 02/22)
             const activityDates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
             const shouldAutoSelect = activityDates.includes(todayStr);
             const autoSelectDate = shouldAutoSelect ? todayStr : 'ALL';
@@ -830,7 +830,7 @@
             const schedule = document.createElement('div');
             schedule.className = 'store-schedule';
             const dates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
-            const dateLabels = {'02/14':'小年夜','02/15':'除夕','02/16':'初一','02/17':'初二','02/18':'初三','02/19':'初四','02/20':'初五','02/21':'初六','02/22':'初七'};
+            const dateLabels = {'02/14':'小年夜','02/15':'','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五','02/22':'初六'};
 
             // 始終顯示全部 9 天的營業資訊
             dates.forEach(date => schedule.appendChild(createScheduleItem(date, store[date], dateLabels[date])));
