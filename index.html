@@ -575,8 +575,8 @@
                 <button class="filter-btn" data-category="吃" title="吃">吃</button>
                 <button class="filter-btn" data-category="喝" title="喝">喝</button>
                 <button class="filter-btn" data-category="玩" title="玩">玩</button>
-                <button class="filter-btn" data-category="其" title="其他">其</button>
                 <button class="filter-btn" data-category="醫" title="醫療">醫</button>
+                <button class="filter-btn" data-category="其" title="其他">其</button>
             </div>
 
             <div class="date-header">
@@ -679,8 +679,8 @@
         function initializeDateTabs() {
             const dates = [
                 { id: 'ALL', label: '全部日期' },
-                { id: '02/14', label: '02/14 (六) 小年夜' },
-                { id: '02/15', label: '02/15 (日)' },
+                { id: '02/14', label: '02/14 (六)' },
+                { id: '02/15', label: '02/15 (日) 小年夜' },
                 { id: '02/16', label: '02/16 (一) 除夕' },
                 { id: '02/17', label: '02/17 (二) 初一' },
                 { id: '02/18', label: '02/18 (三) 初二' },
@@ -830,10 +830,11 @@
             const schedule = document.createElement('div');
             schedule.className = 'store-schedule';
             const dates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
-            const dateLabels = {'02/14':'小年夜','02/15':'','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五','02/22':'初六'};
+            const dateLabels = {'02/14':'','02/15':'小年夜','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五','02/22':'初六'};
+            const dayOfWeek = {'02/14':'六','02/15':'日','02/16':'一','02/17':'二','02/18':'三','02/19':'四','02/20':'五','02/21':'六','02/22':'日'};
 
             // 始終顯示全部 9 天的營業資訊
-            dates.forEach(date => schedule.appendChild(createScheduleItem(date, store[date], dateLabels[date])));
+            dates.forEach(date => schedule.appendChild(createScheduleItem(date, store[date], dateLabels[date], dayOfWeek[date])));
             card.appendChild(schedule);
 
             // 社群連結 (放在下方)
@@ -864,7 +865,7 @@
             return card;
         }
 
-        function createScheduleItem(date, status, label) {
+        function createScheduleItem(date, status, label, day) {
             const item = document.createElement('div');
             item.className = 'schedule-item';
             const isClosed = !status || status === '休' || status.includes('休');
@@ -872,8 +873,10 @@
             
             const dateSpan = document.createElement('span');
             dateSpan.className = 'date-label';
-            // 始終顯示完整日期格式 (日期 標籤)
-            dateSpan.textContent = `${date} ${label}`;
+            // 顯示完整日期格式 (日期 (星期) 標籤)
+            const dayDisplay = day ? ` (${day})` : '';
+            const labelDisplay = label ? ` ${label}` : '';
+            dateSpan.textContent = `${date}${dayDisplay}${labelDisplay}`;
             
             const statusSpan = document.createElement('span');
             statusSpan.className = 'status-text';
