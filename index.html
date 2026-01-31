@@ -120,16 +120,27 @@
 
         .search-bar {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 60px;
-            right: 0;
+            right: 20px;
+            left: 20px;
             background: white;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 12px 15px;
             box-shadow: var(--shadow);
             z-index: 100;
-            min-width: 320px;
+            max-width: calc(100% - 40px);
+        }
+
+        @media (min-width: 768px) {
+            .search-bar {
+                position: absolute;
+                right: 0;
+                left: auto;
+                min-width: 320px;
+                max-width: none;
+            }
         }
 
         .search-bar.active {
@@ -687,7 +698,7 @@
                 { id: '02/19', label: '02/19 (四) 初三' },
                 { id: '02/20', label: '02/20 (五) 初四' },
                 { id: '02/21', label: '02/21 (六) 初五' },
-                { id: '02/22', label: '02/22 (日) 初六' }
+                { id: '02/22', label: '02/22 (日)' }
             ];
             const dateTabs = document.getElementById('dateTabs');
             
@@ -830,7 +841,7 @@
             const schedule = document.createElement('div');
             schedule.className = 'store-schedule';
             const dates = ['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'];
-            const dateLabels = {'02/14':'','02/15':'小年夜','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五','02/22':'初六'};
+            const dateLabels = {'02/14':'','02/15':'小年夜','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五','02/22':''};
             const dayOfWeek = {'02/14':'六','02/15':'日','02/16':'一','02/17':'二','02/18':'三','02/19':'四','02/20':'五','02/21':'六','02/22':'日'};
 
             // 始終顯示全部 9 天的營業資訊
