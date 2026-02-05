@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1TMZNJFR4L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-1TMZNJFR4L');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1TMZNJFR4L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1TMZNJFR4L');
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +24,7 @@
 
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-color: #f9f8f6;
@@ -35,8 +35,6 @@
             --accent-blue: #2a4073;
             --border-color: #e5e2dd;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            --accent-light: #fff5f9;
-            --accent-lighter: #f9f8f6;
         }
 
         * {
@@ -49,15 +47,15 @@
             width: 100%;
             height: 100%;
             overflow-x: hidden;
-            scroll-behavior: smooth; /* 加入平滑捲動 */
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 2;
-            /* 移除原本 body 的上方 padding，讓 sticky 能貼齊最上方 */
+            line-height: 1.8;
+            /* 移除 body padding-top 讓 sticky 貼齊 */
             padding: 0 20px 40px; 
             -webkit-user-select: none;
             user-select: none;
@@ -73,21 +71,18 @@
             justify-content: center;
             align-items: flex-start;
             margin-bottom: 30px;
-            padding-top: 40px; /* 將上方間距改在這裡 */
+            padding-top: 40px; /* 改在 header 內設定間距 */
             position: relative;
             gap: 20px;
         }
 
-        .header-title {
-            text-align: center;
-        }
+        .header-title { text-align: center; }
 
         h1 {
             font-size: 1.8rem;
             font-weight: 500;
             letter-spacing: 3px;
             margin-bottom: 12px;
-            color: var(--text-main);
         }
 
         h1::after {
@@ -103,26 +98,23 @@
             font-size: 0.9rem;
             color: var(--text-sub);
             letter-spacing: 1px;
-            font-weight: 300;
         }
 
+        /* Search Layout */
         .search-icon-btn {
             position: absolute;
             right: 0;
-            top: 40px; /* 與 padding-top 對齊 */
+            top: 40px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: transparent;
             border: 1px solid var(--border-color);
-            color: var(--text-main);
+            background: transparent;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
             transition: all 0.3s;
-            flex-shrink: 0;
         }
 
         .search-icon-btn:hover {
@@ -134,100 +126,48 @@
         .search-bar {
             display: none;
             position: fixed;
-            top: 60px;
+            top: 10px;
             right: 20px;
             left: 20px;
             background: white;
-            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 12px 15px;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            max-width: calc(100% - 40px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 2000;
         }
 
-        @media (min-width: 768px) {
-            .search-bar {
-                position: absolute;
-                right: 0;
-                top: 90px;
-                left: auto;
-                min-width: 320px;
-                max-width: none;
-            }
-        }
+        .search-bar.active { display: flex; align-items: center; gap: 10px; }
+        .search-bar input { flex-grow: 1; border: none; outline: none; }
 
-        .search-bar.active {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .search-bar input {
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-family: inherit;
-            color: var(--text-main);
-        }
-
-        .search-bar input::placeholder { color: #ccc; }
-
-        .search-bar-close {
-            cursor: pointer;
-            color: var(--text-sub);
-            font-size: 1.2rem;
-            transition: color 0.2s;
-        }
-
-        .search-bar-close:hover { color: var(--accent-red); }
-
-        /* Filter Buttons - 更新置頂樣式 */
+        /* Filter Buttons - Sticky Fix */
         .filter-buttons {
             display: flex;
             flex-wrap: nowrap;
             gap: 10px;
             justify-content: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             overflow-x: auto;
             padding: 15px 5px;
             scrollbar-width: none;
             position: sticky;
-            top: 0; /* 吸附最上方無間距 */
+            top: 0; /* 貼齊最上方 */
             background: var(--bg-color);
             z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* 置頂時稍微加深陰影區隔 */
-            margin-top: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .filter-buttons::-webkit-scrollbar { display: none; }
 
         .filter-btn {
-            padding: 8px 16px;
+            padding: 8px 18px;
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            background: var(--card-bg); /* 改為實體背景確保滾動時不透出後方 */
+            background: var(--card-bg);
             color: var(--text-sub);
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 400;
             white-space: nowrap;
-            flex-shrink: 0;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--text-main);
-            color: var(--text-main);
+            transition: all 0.3s;
         }
 
         .filter-btn.active {
@@ -237,59 +177,25 @@
         }
 
         /* Date Tabs */
-        .date-header {
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            position: relative;
-        }
-
-        .date-tabs {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            scrollbar-width: none;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        .date-header { margin-bottom: 30px; border-bottom: 1px solid var(--border-color); }
+        .date-tabs { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .date-tabs::-webkit-scrollbar { display: none; }
-
         .date-tab {
-            padding: 5px 0;
+            padding: 8px 0;
             color: var(--text-sub);
             font-size: 14px;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.3s;
             position: relative;
-            font-weight: 400;
-            flex-shrink: 0;
-            user-select: none;
         }
-
-        .date-tab.active {
-            color: var(--accent-red);
-            font-weight: 500;
-        }
-
+        .date-tab.active { color: var(--accent-red); font-weight: 500; }
         .date-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -11px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent-red);
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent-red);
         }
 
-        /* Grid - Masonry Layout */
-        .stores-grid {
-            column-count: 4;
-            column-gap: 20px;
-        }
-
+        /* Grid */
+        .stores-grid { column-count: 4; column-gap: 20px; }
         @media (max-width: 1200px) { .stores-grid { column-count: 2; } }
         @media (max-width: 768px) { .stores-grid { column-count: 1; } }
 
@@ -298,179 +204,68 @@
             border-radius: 8px;
             padding: 25px;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
             break-inside: avoid;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+        .store-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
 
-        .store-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
-        }
-
-        .store-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .store-name {
-            font-size: 1.25rem;
-            font-weight: 500;
-            color: var(--text-main);
-            line-height: 1.3;
-            flex-grow: 1;
-        }
-
-        .store-category {
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            flex-shrink: 0;
-            margin-left: 10px;
-        }
+        .store-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .store-name { font-size: 1.2rem; font-weight: 500; line-height: 1.4; }
+        .store-category { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin-left: 10px; }
 
         .category-吃 { background: #fff5f9; color: #e85d7a; }
         .category-喝 { background: #f0f4f8; color: #2a4073; }
         .category-玩 { background: #fdf8f2; color: #8a6d3b; }
-        .category-其 { background: #f4f4f4; color: #666666; }
         .category-醫 { background: #f2fdfa; color: #2d8a7d; }
+        .category-其 { background: #f4f4f4; color: #666; }
 
-        .info-item {
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-            color: var(--text-sub);
-            display: flex;
-            align-items: center;
-        }
+        .info-item { display: flex; align-items: center; font-size: 0.9rem; color: var(--text-sub); margin-bottom: 5px; }
+        .info-item i { width: 25px; color: var(--text-main); }
+        .info-item a { color: var(--text-sub); text-decoration: none; }
 
-        .info-item i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-            color: var(--text-main);
-            width: 20px;
-            text-align: center;
-            flex-shrink: 0;
-        }
+        .store-note { margin: 12px 0; padding: 8px 12px; background: #f5f5f5; border-left: 3px solid var(--accent-red); font-size: 0.85rem; border-radius: 4px; }
 
-        .info-item a {
-            color: var(--text-sub);
-            text-decoration: none;
-            word-break: break-all;
-        }
-
-        /* 備註欄位樣式 */
-        .store-note {
-            margin: 10px 0;
-            padding: 8px 12px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            border-left: 3px solid var(--accent-red);
-        }
-
-        /* Schedule */
-        .store-schedule {
-            margin-top: 8px;
-            background: #fafafa;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .schedule-item.open { color: var(--text-main); }
+        .store-schedule { background: #fafafa; border-radius: 6px; padding: 12px; margin: 15px 0; }
+        .schedule-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid #eee; }
+        .schedule-item:last-child { border-bottom: none; }
         .schedule-item.closed { color: #ccc; }
-        .schedule-item.open .status-text { color: var(--accent-red); font-weight: 500;}
+        .schedule-item.open .status-text { color: var(--accent-red); font-weight: 500; }
 
-        /* Social Links */
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: auto;
-        }
+        .social-links { display: flex; gap: 10px; margin-top: 15px; }
+        .social-btn { width: 36px; height: 36px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text-sub); transition: 0.3s; }
+        .social-btn:hover { background: var(--text-main); color: #fff; transform: scale(1.1); }
 
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            color: var(--text-sub);
-            text-decoration: none;
-            transition: all 0.3s;
-            font-size: 1.2rem;
-        }
-
-        .social-btn:hover {
-            background: var(--text-main);
-            color: #fff;
-            transform: scale(1.1);
-        }
-
-        /* Go To Top Button */
+        /* Go To Top - 強化版 */
         .go-to-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 25px;
+            right: 25px;
             width: 50px;
             height: 50px;
             background: var(--accent-red);
-            color: white;
+            color: white !important;
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: none; /* JS 控制顯示 */
+            display: none; /* JS 控制 */
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 4px 12px rgba(232, 93, 122, 0.4);
-            transition: all 0.3s ease;
-            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(232, 93, 122, 0.4);
+            z-index: 9999;
+            transition: all 0.3s;
         }
+        .go-to-top.show { display: flex !important; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .go-to-top:hover {
-            background: #d64563;
-            transform: translateY(-5px);
-        }
-
-        .go-to-top.show { display: flex; }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            color: var(--text-sub);
-        }
-
+        .footer { text-align: center; margin-top: 60px; padding: 30px 0; border-top: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-sub); }
         .footer a { color: var(--text-main); text-decoration: none; font-weight: 500; }
 
         @media (max-width: 600px) {
-            body { padding: 0 15px 30px; }
-            h1 { font-size: 1.5rem; }
-            header { padding-top: 30px; margin-bottom: 20px; }
+            header { padding-top: 30px; }
             .search-icon-btn { top: 30px; }
-            .go-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+            h1 { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -481,25 +276,17 @@
                 <h1>2026 七堵春節店家資訊</h1>
                 <div class="subtitle">2026.02.14 - 02.22 營業時間一覽</div>
             </div>
-            <button class="search-icon-btn" id="searchBtn" title="搜尋">
-                <i class="la la-search"></i>
-            </button>
+            <button class="search-icon-btn" id="searchBtn"><i class="la la-search"></i></button>
             <div class="search-bar" id="searchBar">
-                <i class="la la-search" style="color: var(--text-sub);"></i>
+                <i class="la la-search"></i>
                 <input type="text" id="searchInput" placeholder="搜尋店家名稱...">
-                <span class="search-bar-close" id="searchClose">
-                    <i class="la la-times"></i>
-                </span>
+                <i class="la la-times" id="searchClose" style="cursor:pointer"></i>
             </div>
         </header>
 
-        <div id="loading" class="loading" style="text-align: center; padding: 100px 0;">
-            <i class="la la-spinner la-spin" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
-            資料讀取中...
-        </div>
-        <div id="error" class="error" style="display: none; color: red; text-align: center; padding: 50px;"></div>
+        <div id="loading" style="text-align:center; padding: 100px 0;">讀取中...</div>
 
-        <div id="content" style="display: none;">
+        <div id="content" style="display:none">
             <div class="filter-buttons" id="filterButtons">
                 <button class="filter-btn active" data-category="ALL">全部</button>
                 <button class="filter-btn" data-category="吃">吃</button>
@@ -508,208 +295,141 @@
                 <button class="filter-btn" data-category="醫">醫</button>
                 <button class="filter-btn" data-category="其">其他</button>
             </div>
-
-            <div class="date-header">
-                <div class="date-tabs" id="dateTabs"></div>
-            </div>
-
+            <div class="date-header"><div class="date-tabs" id="dateTabs"></div></div>
             <div class="stores-grid" id="storesGrid"></div>
         </div>
 
         <div class="footer">
             <p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作與維護</p>
-            <p style="margin-top: 8px; opacity: 0.7;">資料如有錯誤或要提供資訊請私訊粉專</p>
         </div>
     </div>
 
-    <button class="go-to-top" id="goToTopBtn" title="回到頂部">
-        <i class="la la-arrow-up"></i>
-    </button>
+    <button class="go-to-top" id="goToTopBtn"><i class="la la-arrow-up"></i></button>
 
     <script>
-        const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
-
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
         let storesData = [];
-        let currentCategory = 'ALL';
+        let currentCat = 'ALL';
         let currentDate = 'ALL';
 
-        async function loadData() {
+        async function init() {
             try {
-                const response = await fetch(PUBLISHED_CSV_URL);
-                if (!response.ok) throw new Error('無法讀取資料');
-                const csvText = await response.text();
-                const rows = parseCSV(csvText);
-                
+                const res = await fetch(CSV_URL);
+                const text = await res.text();
+                const rows = text.split('\n').map(r => r.split(',').map(c => c.replace(/"/g, '').trim()));
                 const headers = rows[0];
                 storesData = rows.slice(1).map(row => {
-                    const store = {};
-                    headers.forEach((header, index) => {
-                        store[header] = row[index] || '';
-                    });
-                    return store;
-                }).filter(store => store['店名']);
-
-                // 隨機排序
-                storesData = storesData.sort(() => Math.random() - 0.5);
+                    let obj = {};
+                    headers.forEach((h, i) => obj[h] = row[i]);
+                    return obj;
+                }).filter(s => s['店名']).sort(() => Math.random() - 0.5);
 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
-                
-                initializeDateTabs();
+                renderTabs();
                 renderStores();
-                setupSearch();
-            } catch (error) {
-                document.getElementById('loading').style.display = 'none';
-                const errorDiv = document.getElementById('error');
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
-            }
+            } catch (e) { console.error(e); }
         }
 
-        function parseCSV(text) {
-            const lines = text.split('\n');
-            return lines.map(line => {
-                const row = [];
-                let current = '';
-                let inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    if (char === '"') inQuotes = !inQuotes;
-                    else if (char === ',' && !inQuotes) {
-                        row.push(current.trim());
-                        current = '';
-                    } else current += char;
-                }
-                row.push(current.trim());
-                return row;
-            });
-        }
-
-        function initializeDateTabs() {
+        function renderTabs() {
             const dates = [
                 { id: 'ALL', label: '全部' },
-                { id: '02/14', label: '02/14 (六)' },
-                { id: '02/15', label: '02/15 (日) 小年夜' },
-                { id: '02/16', label: '02/16 (一) 除夕' },
-                { id: '02/17', label: '02/17 (二) 初一' },
-                { id: '02/18', label: '02/18 (三) 初二' },
-                { id: '02/19', label: '02/19 (四) 初三' },
-                { id: '02/20', label: '02/20 (五) 初四' },
-                { id: '02/21', label: '02/21 (六) 初五' },
+                { id: '02/14', label: '02/14 (六)' }, { id: '02/15', label: '02/15 (日) 小年夜' },
+                { id: '02/16', label: '02/16 (一) 除夕' }, { id: '02/17', label: '02/17 (二) 初一' },
+                { id: '02/18', label: '02/18 (三) 初二' }, { id: '02/19', label: '02/19 (四) 初三' },
+                { id: '02/20', label: '02/20 (五) 初四' }, { id: '02/21', label: '02/21 (六) 初五' },
                 { id: '02/22', label: '02/22 (日)' }
             ];
-            const dateTabs = document.getElementById('dateTabs');
-            
-            dates.forEach(date => {
-                const tab = document.createElement('div');
-                tab.className = 'date-tab' + (date.id === 'ALL' ? ' active' : '');
-                tab.textContent = date.label;
-                tab.dataset.date = date.id;
-                tab.addEventListener('click', () => {
+            const container = document.getElementById('dateTabs');
+            dates.forEach(d => {
+                const div = document.createElement('div');
+                div.className = `date-tab ${d.id === 'ALL' ? 'active' : ''}`;
+                div.textContent = d.label;
+                div.onclick = () => {
                     document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentDate = date.id;
+                    div.classList.add('active');
+                    currentDate = d.id;
                     renderStores();
-                });
-                dateTabs.appendChild(tab);
+                };
+                container.appendChild(div);
             });
         }
 
         function renderStores() {
             const grid = document.getElementById('storesGrid');
             grid.innerHTML = '';
-            const filteredStores = storesData.filter(store => {
-                if (currentCategory !== 'ALL' && store['分類'] !== currentCategory) return false;
-                if (currentDate !== 'ALL' && (store[currentDate] === '休息' || store[currentDate] === '休')) return false;
+            const filtered = storesData.filter(s => {
+                if (currentCat !== 'ALL' && s['分類'] !== currentCat) return false;
+                if (currentDate !== 'ALL' && (s[currentDate] === '休息' || s[currentDate] === '休')) return false;
                 return true;
             });
-            
-            if (filteredStores.length === 0) {
-                grid.innerHTML = '<div class="no-results" style="padding: 40px; text-align: center; color: #999; width: 100%;">找不到相符的店家</div>';
-            } else {
-                filteredStores.forEach(store => grid.appendChild(createStoreCard(store)));
-            }
+            filtered.forEach(s => grid.appendChild(createCard(s)));
         }
 
-        function createStoreCard(store) {
-            const card = document.createElement('div');
-            card.className = 'store-card';
+        function createCard(s) {
+            const div = document.createElement('div');
+            div.className = 'store-card';
+            const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('基隆市七堵區' + s['地址'])}`;
             
-            const fullAddress = `基隆市七堵區${store['地址']}`;
-            const encodedAddress = encodeURIComponent(fullAddress);
-
-            card.innerHTML = `
+            div.innerHTML = `
                 <div class="store-header">
-                    <div class="store-name">${store['店名']}</div>
-                    <span class="store-category category-${store['分類'] || '其'}">${store['分類'] || '其他'}</span>
+                    <div class="store-name">${s['店名']}</div>
+                    <span class="store-category category-${s['分類'] || '其'}">${s['分類'] || '其他'}</span>
                 </div>
                 <div class="store-info">
-                    ${store['電話'] ? `<div class="info-item"><i class="la la-phone"></i><a href="tel:${store['電話']}">${store['電話']}</a></div>` : ''}
-                    ${store['地址'] ? `<div class="info-item"><i class="la la-map-marker"></i><a href="https://www.google.com/maps/search/?api=1&query=${encodedAddress}" target="_blank">${store['地址']}</a></div>` : ''}
-                    ${store['備註'] ? `<div class="store-note">${store['備註']}</div>` : ''}
+                    ${s['電話'] ? `<div class="info-item"><i class="la la-phone"></i><a href="tel:${s['電話']}">${s['電話']}</a></div>` : ''}
+                    ${s['地址'] ? `<div class="info-item"><i class="la la-map-marker"></i><a href="${gmapUrl}" target="_blank">${s['地址']}</a></div>` : ''}
+                    ${s['備註'] ? `<div class="store-note">${s['備註']}</div>` : ''}
                 </div>
                 <div class="store-schedule">
-                    ${['02/14', '02/15', '02/16', '02/17', '02/18', '02/19', '02/20', '02/21', '02/22'].map(d => {
-                        const status = store[d] || '營業';
+                    ${['02/14','02/15','02/16','02/17','02/18','02/19','02/20','02/21','02/22'].map(d => {
+                        const status = s[d] || '營業';
                         const isClosed = status === '休息' || status === '休';
-                        return `<div class="schedule-item ${isClosed ? 'closed' : 'open'}">
-                            <span>${d}</span>
-                            <span class="status-text">${status}</span>
-                        </div>`;
+                        return `<div class="schedule-item ${isClosed ? 'closed' : 'open'}"><span>${d}</span><span class="status-text">${status}</span></div>`;
                     }).join('')}
                 </div>
                 <div class="social-links">
-                    ${store['線上訂餐'] ? `<a href="${store['線上訂餐']}" class="social-btn" target="_blank"><i class="la la-shopping-cart"></i></a>` : ''}
-                    ${store['粉專'] ? `<a href="${store['粉專']}" class="social-btn" target="_blank"><i class="la la-facebook"></i></a>` : ''}
-                    ${store['IG'] ? `<a href="${store['IG']}" class="social-btn" target="_blank"><i class="la la-instagram"></i></a>` : ''}
+                    ${s['粉專'] ? `<a href="${s['粉專']}" class="social-btn" target="_blank"><i class="la la-facebook"></i></a>` : ''}
+                    ${s['IG'] ? `<a href="${s['IG']}" class="social-btn" target="_blank"><i class="la la-instagram"></i></a>` : ''}
+                    ${s['線上訂餐'] ? `<a href="${s['線上訂餐']}" class="social-btn" target="_blank"><i class="la la-shopping-cart"></i></a>` : ''}
                 </div>
             `;
-            return card;
+            return div;
         }
 
-        function setupSearch() {
-            const searchBtn = document.getElementById('searchBtn');
-            const searchBar = document.getElementById('searchBar');
-            const searchInput = document.getElementById('searchInput');
-            const searchClose = document.getElementById('searchClose');
-
-            searchBtn.onclick = () => searchBar.classList.toggle('active');
-            searchClose.onclick = () => {
-                searchBar.classList.remove('active');
-                searchInput.value = '';
-                renderStores();
-            };
-
-            searchInput.oninput = (e) => {
-                const val = e.target.value.toLowerCase();
-                const filtered = storesData.filter(s => s['店名'].toLowerCase().includes(val));
-                const grid = document.getElementById('storesGrid');
-                grid.innerHTML = '';
-                filtered.forEach(s => grid.appendChild(createStoreCard(s)));
-            };
-        }
-
-        // 監聽滾動事件
-        window.addEventListener('scroll', () => {
-            const btn = document.getElementById('goToTopBtn');
-            if (window.scrollY > 400) btn.classList.add('show');
-            else btn.classList.remove('show');
-        });
-
-        document.getElementById('goToTopBtn').onclick = () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // 事件監聽
+        document.getElementById('searchBtn').onclick = () => document.getElementById('searchBar').classList.toggle('active');
+        document.getElementById('searchClose').onclick = () => {
+            document.getElementById('searchBar').classList.remove('active');
+            document.getElementById('searchInput').value = '';
+            renderStores();
         };
-
+        document.getElementById('searchInput').oninput = (e) => {
+            const val = e.target.value.toLowerCase();
+            const filtered = storesData.filter(s => s['店名'].toLowerCase().includes(val));
+            const grid = document.getElementById('storesGrid');
+            grid.innerHTML = '';
+            filtered.forEach(s => grid.appendChild(createCard(s)));
+        };
         document.getElementById('filterButtons').onclick = (e) => {
-            if (e.target.classList.contains('filter-btn')) {
+            if (e.target.dataset.category) {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                currentCategory = e.target.dataset.category;
+                currentCat = e.target.dataset.category;
                 renderStores();
             }
         };
 
-        loadData();
+        // Go To Top 邏輯 - 強化相容性
+        const goToTopBtn = document.getElementById('goToTopBtn');
+        window.onscroll = () => {
+            const top = window.pageYOffset || document.documentElement.scrollTop;
+            if (top > 150) goToTopBtn.classList.add('show');
+            else goToTopBtn.classList.remove('show');
+        };
+        goToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        init();
     </script>
 </body>
 </html>
