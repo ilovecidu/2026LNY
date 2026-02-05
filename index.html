@@ -906,7 +906,8 @@
         function createScheduleItem(date, status, label, day) {
             const item = document.createElement('div');
             item.className = 'schedule-item';
-            const isClosed = !status || status === '休' || status.includes('休');
+            // 嚴格判斷：只有完全等於「休息」或「休」才套用休息樣式
+            const isClosed = status === '休息' || status === '休';
             item.classList.add(isClosed ? 'closed' : 'open');
             
             const dateSpan = document.createElement('span');
@@ -918,7 +919,7 @@
             
             const statusSpan = document.createElement('span');
             statusSpan.className = 'status-text';
-            // 完整顯示營業狀態，不進行簡简化
+            // 完整顯示營業狀態，僅在休息時顯示「休息」，其餘原樣呈現
             statusSpan.textContent = isClosed ? '休息' : (status || '營業');
             
             item.appendChild(dateSpan);
