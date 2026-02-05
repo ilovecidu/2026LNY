@@ -208,6 +208,13 @@
             overflow-x: auto;
             padding: 0 5px;
             scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 100;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .filter-buttons::-webkit-scrollbar {
@@ -525,11 +532,52 @@
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 80px;
+            margin-top: 60px;
             padding-top: 30px;
             border-top: 1px solid var(--border-color);
-            color: var(--text-sub);
             font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        /* Go To Top Button */
+        .go-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(232, 93, 122, 0.3);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .go-to-top:hover {
+            background: #d64563;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(232, 93, 122, 0.4);
+        }
+
+        .go-to-top.show {
+            display: flex;
+        }
+
+        @media (max-width: 600px) {
+            .go-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
         }
 
         .footer a {
@@ -627,6 +675,11 @@
             <p style="margin-top: 8px; opacity: 0.7;">資料如有錯誤或要提供資訊請私訊粉專</p>
         </div>
     </div>
+
+    <!-- Go To Top Button -->
+    <button class="go-to-top" id="goToTopBtn" title="回到頂部">
+        <i class="la la-arrow-up"></i>
+    </button>
 
     <script>
         const PUBLISHED_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
@@ -994,6 +1047,19 @@
                     renderStores();
                 }
             });
+            // 回到頂部按鈕邏輯
+            const goToTopBtn = document.getElementById('goToTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    goToTopBtn.classList.add('show');
+                } else {
+                    goToTopBtn.classList.remove('show');
+                }
+            });
+            goToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
             loadData();
         });
     </script>
