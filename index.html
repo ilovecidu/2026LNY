@@ -213,6 +213,7 @@
             background: var(--bg-color);
             z-index: 100;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 0;
         }
 
         .filter-buttons::-webkit-scrollbar {
@@ -549,15 +550,13 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             box-shadow: 0 4px 12px rgba(232, 93, 122, 0.3);
             transition: all 0.3s ease;
-            z-index: 2147483647;
+            z-index: 999;
         }
 
         .go-to-top:hover {
@@ -567,8 +566,6 @@
         }
 
         .go-to-top.show {
-            opacity: 1;
-            visibility: visible;
             display: flex;
         }
 
@@ -656,6 +653,15 @@
         <div id="error" class="error" style="display: none;"></div>
 
         <div id="content" style="display: none;">
+            <div class="filter-buttons" id="filterButtons">
+                <button class="filter-btn active" data-category="ALL" title="全部">全</button>
+                <button class="filter-btn" data-category="吃" title="吃">吃</button>
+                <button class="filter-btn" data-category="喝" title="喝">喝</button>
+                <button class="filter-btn" data-category="玩" title="玩">玩</button>
+                <button class="filter-btn" data-category="醫" title="醫療">醫</button>
+                <button class="filter-btn" data-category="其" title="其他">其</button>
+            </div>
+
             <div class="date-header">
                 <div class="date-tabs" id="dateTabs"></div>
             </div>
@@ -667,16 +673,6 @@
             <p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作與維護</p>
             <p style="margin-top: 8px; opacity: 0.7;">資料如有錯誤或要提供資訊請私訊粉專</p>
         </div>
-    </div>
-
-    <!-- Filter Buttons (Outside Container for Sticky) -->
-    <div class="filter-buttons" id="filterButtons" style="display: none;">
-        <button class="filter-btn active" data-category="ALL" title="全部">全</button>
-        <button class="filter-btn" data-category="吃" title="吃">吃</button>
-        <button class="filter-btn" data-category="喝" title="喝">喝</button>
-        <button class="filter-btn" data-category="玩" title="玩">玩</button>
-        <button class="filter-btn" data-category="醫" title="醫療">醫</button>
-        <button class="filter-btn" data-category="其" title="其他">其</button>
     </div>
 
     <!-- Go To Top Button -->
@@ -713,7 +709,6 @@
 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
-                document.getElementById('filterButtons').style.display = 'flex';
                 
                 initializeDateTabs();
                 renderStores();
