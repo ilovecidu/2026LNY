@@ -209,7 +209,7 @@
             padding: 0 5px;
             scrollbar-width: none;
             position: sticky;
-            top: 0;
+            top: -15px;
             background: var(--bg-color);
             z-index: 100;
             padding-top: 15px;
@@ -551,13 +551,14 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: none;
+            opacity: 0;
+            visibility: hidden;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             box-shadow: 0 4px 12px rgba(232, 93, 122, 0.3);
             transition: all 0.3s ease;
-            z-index: 99;
+            z-index: 999;
         }
 
         .go-to-top:hover {
@@ -567,6 +568,8 @@
         }
 
         .go-to-top.show {
+            opacity: 1;
+            visibility: visible;
             display: flex;
         }
 
