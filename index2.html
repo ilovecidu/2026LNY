@@ -13,14 +13,14 @@
     <title>2026 七堵春節店家資訊</title>
     
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg-color: #fcfaf7;
             --text-main: #2c2c2c;
             --text-sub: #6b6b6b;
-            --accent-red: #c0392b;
+            --accent-red: #c0392b; 
             --accent-gold: #c5a059;
             --accent-line: #06C755;
             --accent-fb: #1877F2;
@@ -29,14 +29,16 @@
             --border-color: #e5e2dd;
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             font-family: 'Noto Sans TC', sans-serif; 
-            background-color: var(--bg-color); 
+            background-color: var(--bg-color);
             background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
             color: var(--text-main); 
-            overflow-x: hidden;
+            line-height: 1.5;
+            /* 修正：移除 body 的 overflow 限制以確保 sticky 正常運作 */
         }
 
         .festive-top-bar { height: 4px; background: repeating-linear-gradient(90deg, var(--accent-red), var(--accent-red) 40px, var(--accent-gold) 40px, var(--accent-gold) 80px); width: 100%; }
@@ -48,250 +50,217 @@
             background: white; z-index: 2100; align-items: center; padding: 0 20px; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-bottom: 2px solid var(--accent-red);
         }
-        .search-bar input { flex: 1; border: none; outline: none; font-size: 1.1rem; margin: 0 15px; }
+        .search-bar input { flex: 1; border: none; outline: none; font-size: 1.1rem; margin: 0 15px; background: transparent; }
         .search-clear-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ccc; }
 
         header { padding: 45px 15px 25px; text-align: center; }
         .year-tag { font-size: 0.75rem; color: var(--accent-gold); letter-spacing: 2px; margin-bottom: 5px; font-weight: 500; }
         h1 { font-family: 'Noto Serif TC', serif; font-size: 1.7rem; letter-spacing: 3px; color: var(--accent-red); }
 
-        /* 置頂導覽 */
-        .sticky-nav { position: sticky; top: 0; background: rgba(252, 250, 247, 0.96); backdrop-filter: blur(10px); z-index: 1000; padding: 12px 0 0; }
-        .nav-top-row { display: flex; align-items: center; max-width: 1440px; margin: 0 auto; padding: 0 15px; gap: 10px; }
-        .filter-buttons { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex-grow: 1; padding: 5px 0; }
-        .filter-btn { padding: 6px 16px; border-radius: 4px; border: 1px solid var(--border-color); background: white; color: var(--text-main) !important; white-space: nowrap; cursor: pointer; font-size: 0.85rem; }
-        .filter-btn.active { background: var(--accent-red); color: white !important; border-color: var(--accent-red); }
-        .search-icon-btn { flex-shrink: 0; width: 40px; height: 40px; background: white; border: 1px solid var(--accent-gold); border-radius: 50%; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        
-        .date-tabs { display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px; border-bottom: 1px solid var(--border-color); }
-        .date-tab { white-space: nowrap; font-size: 0.82rem; color: var(--text-sub) !important; cursor: pointer; }
-        .date-tab.active { color: var(--accent-red) !important; font-weight: bold; border-bottom: 2px solid var(--accent-red); }
+        /* 置頂導覽：整合兩排選單 */
+        .sticky-nav { 
+            position: -webkit-sticky;
+            position: sticky; 
+            top: 0; 
+            background: rgba(252, 250, 247, 0.98); 
+            backdrop-filter: blur(12px); 
+            z-index: 1000; 
+            padding: 12px 0 0; 
+            border-bottom: 1px solid rgba(229, 226, 221, 0.5); 
+        }
 
-        /* 內容區與卡片 */
-        .main-content { padding: 20px 12px; max-width: 1440px; margin: 0 auto; min-height: 50vh; }
-        .stores-grid { display: flex; gap: 15px; align-items: flex-start; }
+        /* 修正：類別選單與日期選單統一使用相同的對齊結構 */
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-top-row { display: flex; align-items: center; padding: 0 15px 8px; gap: 10px; }
+        .filter-buttons { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex-grow: 1; -webkit-overflow-scrolling: touch; }
+        .filter-buttons::-webkit-scrollbar { display: none; }
+        
+        .filter-btn { 
+            padding: 6px 16px; border-radius: 4px; border: 1px solid var(--border-color); 
+            background: white; color: var(--text-main) !important; white-space: nowrap; 
+            cursor: pointer; font-size: 0.85rem; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+        }
+        .filter-btn.active { background: var(--accent-red); color: white !important; border-color: var(--accent-red); }
+        
+        .search-icon-btn { 
+            flex-shrink: 0; width: 36px; height: 36px; 
+            background: white; border: 1px solid var(--accent-gold); 
+            border-radius: 50%; color: var(--text-main); 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+        }
+        .search-icon-btn svg { width: 16px !important; height: 16px !important; stroke-width: 1.8 !important; }
+
+        /* 修正：日期選單移除置中，改為左對齊並保留 15px 邊距以對齊類別 */
+        .date-tabs { 
+            display: flex; 
+            gap: 20px; 
+            overflow-x: auto; 
+            padding: 10px 15px 8px; /* 統一 15px 左右留白 */
+            border-top: 1px solid rgba(229, 226, 221, 0.3); 
+            scrollbar-width: none; 
+            justify-content: flex-start; /* 改回左對齊，靠 padding 控制視覺起點 */
+            -webkit-overflow-scrolling: touch;
+        }
+        .date-tabs::-webkit-scrollbar { display: none; }
+        .date-tab { white-space: nowrap; font-size: 0.82rem; color: var(--text-sub) !important; cursor: pointer; padding-bottom: 8px; }
+        .date-tab.active { color: var(--accent-red) !important; font-weight: bold; border-bottom: 2.5px solid var(--accent-red); }
+
+        /* 內容區：Padding 與導覽列同步 */
+        .main-content { padding: 20px 15px; max-width: 1400px; margin: 0 auto; min-height: 60vh; }
+        .stores-grid { display: flex; gap: 15px; width: 100%; align-items: flex-start; }
         .grid-column { flex: 1; display: flex; flex-direction: column; gap: 15px; min-width: 0; }
         @media (max-width: 600px) { .stores-grid { gap: 10px; } .grid-column { gap: 10px; } }
 
-        .store-card { 
-            background: white; border-radius: 8px; padding: 22px 16px 16px; 
-            border: 1px solid var(--border-color); border-top: 3.5px solid var(--accent-gold);
-            box-shadow: var(--shadow); width: 100%; position: relative; 
-        }
+        /* 店家卡片樣式還原 */
+        .store-card { background: white; border-radius: 8px; padding: 22px 16px 16px; border: 1px solid var(--border-color); border-top: 3.5px solid var(--accent-gold); box-shadow: var(--shadow); width: 100%; position: relative; }
         .store-card.is-closed { opacity: 0.6; }
-
-        .store-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-        .store-name { font-family: 'Noto Serif TC', serif; font-size: 1.15rem; color: #1a1a1a; flex: 1; line-height: 1.3; }
-        .category-text { font-size: 0.75rem; color: #bbb; margin-left: 6px; }
+        .store-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
+        .store-name { font-family: 'Noto Serif TC', serif; font-size: 1.15rem; color: #1a1a1a; flex: 1; line-height: 1.3; font-weight: 700; }
+        
+        /* 類別：還原為無邊框金色純文字 */
+        .category-text { font-size: 0.72rem; color: var(--accent-gold); flex-shrink: 0; margin-top: 2px; font-weight: 500; }
         
         .contact-info { margin-bottom: 6px; }
         .contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-sub) !important; text-decoration: none; line-height: 2; }
-        .contact-item svg { width: 15px; height: 15px; stroke-width: 1.5; color: #bbb; }
-
+        
+        /* Icon 統一鎖定尺寸與細度 */
+        .store-card svg { width: 14px !important; height: 14px !important; stroke-width: 1.5 !important; flex-shrink: 0; }
         .status-text { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 400; margin-bottom: 12px; color: var(--accent-red); }
-        .status-text svg { width: 14px; height: 14px; }
+        .contact-item svg { color: #bbb; }
 
-        .remark-box { border-left: 3px solid var(--accent-gold); padding: 2px 0 2px 12px; margin-bottom: 15px; font-size: 0.82rem; color: #7a6e5a; line-height: 1.6; background: rgba(197, 160, 89, 0.03); }
+        .remark-box { border-left: 3px solid var(--accent-gold); padding: 4px 0 4px 12px; margin-bottom: 15px; font-size: 0.82rem; color: #7a6e5a; line-height: 1.6; background: rgba(197, 160, 89, 0.03); }
 
-        /* 動畫收合區塊修正 */
-        .store-details-wrapper { 
-            display: grid; 
-            grid-template-rows: 0fr; 
-            transition: grid-template-rows 0.3s ease-out; 
-            overflow: hidden; 
-        }
-        .store-details-wrapper.open { grid-template-rows: 1fr; }
-        .store-details-inner { min-height: 0; }
+        .store-details { display: none; margin-bottom: 15px; }
 
-        .store-schedule { border: 1px solid #f0f0f0; border-radius: 6px; overflow: hidden; margin: 10px 0 15px; }
+        /* 修正：恢復白灰相間的時間列表 */
+        .store-schedule { border: 1px solid #f0f0f0; border-radius: 6px; overflow: hidden; margin-top: 5px; }
         .schedule-item { display: flex; justify-content: space-between; font-size: 0.72rem; padding: 8px 12px; color: #555; }
         .schedule-item:nth-child(odd) { background: #ffffff; }
         .schedule-item:nth-child(even) { background: #f9f9f9; }
 
-        /* 社群按鈕色彩優化 */
+        /* 社群按鈕 */
         .social-links { display: flex; gap: 10px; margin-top: 15px; margin-bottom: 15px; flex-wrap: wrap; }
         .social-btn { 
             background: #f8f6f3; color: var(--text-sub); width: 36px; height: 36px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; transition: all 0.25s ease;
         }
-        .social-btn svg { width: 18px; height: 18px; stroke-width: 1.5; fill: none; stroke: currentColor; }
-        
-        /* 懸浮狀態：不同顏色區分 */
-        .social-btn:hover { background: var(--accent-red); color: white; transform: translateY(-2px); }
-        .social-btn.fb:hover { background: var(--accent-fb); color: white; }
-        .social-btn.line:hover { background: var(--accent-line); color: white; }
-        .social-btn.shop:hover { background: var(--accent-shop); color: white; }
-        .social-btn.web:hover { background: var(--accent-web); color: white; }
-        
-        /* LINE 圖示在懸浮時變白 */
-        .social-btn.line svg { fill: currentColor; stroke: none; }
+        .social-btn svg { width: 18px !important; height: 18px !important; stroke-width: 1.5 !important; }
+        .social-btn:hover { background: var(--accent-red); color: white !important; transform: translateY(-2px); }
+        .social-btn.fb:hover { background: var(--accent-fb); color: white !important; }
+        .social-btn.line:hover { background: var(--accent-line); color: white !important; }
+        .social-btn.shop:hover { background: var(--accent-shop); color: white !important; }
+        .social-btn.web:hover { background: var(--accent-web); color: white !important; }
+        .social-btn.line svg { fill: currentColor; stroke: none; width: 22px !important; height: 22px !important; }
 
-        .toggle-btn { width: 100%; padding: 10px; background: white; border: 1px solid #eee; border-radius: 6px; color: var(--accent-red); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500; }
+        .toggle-btn { width: 100%; padding: 12px; background: white; border: 1px solid #eee; border-radius: 6px; color: var(--accent-red); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; }
 
-        .footer { background: var(--bg-color); color: var(--text-main); text-align: center; padding: 40px 15px; border-top: 1px solid var(--border-color); line-height: 2; }
-        .footer p { font-size: 0.85rem; margin: 0; }
-        .footer a { color: var(--accent-red); text-decoration: none; font-weight: 500; }
+        .footer { background: var(--bg-color); text-align: center; padding: 45px 15px; border-top: 1px solid var(--border-color); width: 100%; }
+        .footer p { font-size: 0.85rem !important; margin: 0; line-height: 2; color: var(--text-main); }
+        .footer a { color: var(--accent-red); text-decoration: none; font-weight: 700; }
     </style>
 </head>
 <body>
-    <div class="festive-top-bar"></div>
-    <div class="search-bar" id="searchBar"><i data-lucide="search"></i><input type="text" id="searchInput" placeholder="搜尋店家名稱..."><div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div></div>
-
-    <header>
-        <div class="year-tag">丙午馬年 ‧ 歲次二零二六</div>
-        <h1>2026 七堵春節店家資訊</h1>
-    </header>
-
-    <div class="sticky-nav">
-        <div class="nav-top-row">
-            <div class="filter-buttons" id="filterButtons">
-                <button class="filter-btn active" data-category="ALL">全</button>
-                <button class="filter-btn" data-category="吃">吃</button>
-                <button class="filter-btn" data-category="喝">喝</button>
-                <button class="filter-btn" data-category="玩">玩</button>
-                <button class="filter-btn" data-category="醫">醫</button>
-                <button class="filter-btn" data-category="其">其</button>
+    <div class="page-wrapper">
+        <div class="festive-top-bar"></div>
+        <div class="search-bar" id="searchBar"><i data-lucide="search"></i><input type="text" id="searchInput" placeholder="搜尋店家名稱..."><div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div></div>
+        <header><div class="year-tag">丙午馬年 ‧ 歲次二零二六</div><h1>2026 七堵春節店家資訊</h1></header>
+        
+        <div class="sticky-nav">
+            <div class="nav-container">
+                <div class="nav-top-row">
+                    <div class="filter-buttons" id="filterButtons">
+                        <button class="filter-btn active" data-category="ALL">全</button>
+                        <button class="filter-btn" data-category="吃">吃</button>
+                        <button class="filter-btn" data-category="喝">喝</button>
+                        <button class="filter-btn" data-category="玩">玩</button>
+                        <button class="filter-btn" data-category="醫">醫</button>
+                        <button class="filter-btn" data-category="其">其</button>
+                    </div>
+                    <button class="search-icon-btn" id="searchBtn"><i data-lucide="search"></i></button>
+                </div>
+                <div class="date-tabs" id="dateTabs"></div>
             </div>
-            <button class="search-icon-btn" id="searchBtn"><i data-lucide="search"></i></button>
         </div>
-        <div class="date-tabs" id="dateTabs"></div>
-    </div>
 
-    <div class="main-content">
-        <div id="loading" style="text-align:center; padding: 100px; color: var(--accent-gold);">讀取中...</div>
-        <div class="stores-grid" id="storesGrid"></div>
-    </div>
+        <div class="main-content">
+            <div id="loading" style="text-align:center; padding: 100px; color: var(--accent-gold);">讀取中...</div>
+            <div class="stores-grid" id="storesGrid"></div>
+        </div>
 
-    <div class="footer">
-        <p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作維護</p>
-        <p>如須新增修改店家資訊，請私訊粉專聯繫</p>
+        <div class="footer"><p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作維護</p><p>如須新增修改店家資訊，請私訊粉專聯繫</p></div>
     </div>
 
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
         let storesData = []; let currentCategory = 'ALL'; let currentDate = 'ALL';
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
         async function init() {
             try {
                 const res = await fetch(CSV_URL); const csv = await res.text();
                 const rows = csv.split('\n').map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim()));
                 const headers = rows[0];
-                storesData = rows.slice(1).map(r => {
-                    let obj = {}; headers.forEach((h, i) => obj[headers[i]] = r[i] || ''); return obj;
-                }).filter(s => s['店名']);
+                storesData = rows.slice(1).map(r => { let obj = {}; headers.forEach((h, i) => obj[headers[i]] = r[i] || ''); return obj; }).filter(s => s['店名']);
                 storesData = shuffleArray(storesData);
-                const today = new Date();
-                const todayStr = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+                const today = new Date(); const todayStr = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
                 currentDate = ['02/14','02/15','02/16','02/17','02/18','02/19','02/20','02/21','02/22'].includes(todayStr) ? todayStr : '02/16'; 
                 initDateTabs(); setupFilters(); setupSearch(); render();
                 document.getElementById('loading').style.display = 'none';
             } catch (e) { console.error(e); }
         }
-
         function setupFilters() {
             document.getElementById('filterButtons').addEventListener('click', (e) => {
                 if (e.target.classList.contains('filter-btn')) {
                     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentCategory = e.target.dataset.category;
-                    render();
+                    e.target.classList.add('active'); currentCategory = e.target.dataset.category; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
-
         function initDateTabs() {
             const dates = [{ id: 'ALL', label: '全' }, { id: '02/14', label: '02/14' }, { id: '02/15', label: '02/15 小年' }, { id: '02/16', label: '02/16 除夕' }, { id: '02/17', label: '02/17 初一' }, { id: '02/18', label: '02/18 初二' }, { id: '02/19', label: '02/19 初三' }, { id: '02/20', label: '02/20 初四' }, { id: '02/21', label: '02/21 初五' }, { id: '02/22', label: '02/22' }];
             const container = document.getElementById('dateTabs');
             dates.forEach(d => {
                 const el = document.createElement('div'); el.className = 'date-tab' + (d.id === currentDate ? ' active' : ''); el.textContent = d.label;
-                el.onclick = () => { currentDate = d.id; document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); render(); };
+                el.onclick = () => { currentDate = d.id; document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
                 container.appendChild(el);
             });
         }
-
         function render() {
             const grid = document.getElementById('storesGrid'); grid.innerHTML = '';
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const displayDate = currentDate === 'ALL' ? '02/16' : currentDate;
             const filtered = storesData.filter(s => (currentCategory === 'ALL' || s['分類'] === currentCategory) && s['店名'].toLowerCase().includes(keyword));
-            
             if (filtered.length === 0) {
                 grid.innerHTML = `<div style="text-align:center; padding: 60px 20px; color:#ccc; width:100%;"><i data-lucide="search-x" style="width:48px;height:48px;margin-bottom:15px;opacity:0.5;"></i><p>找不到相符的店家</p></div>`;
                 lucide.createIcons(); return;
             }
-
+            const width = window.innerWidth; let colCount = width <= 600 ? 2 : (width <= 1200 ? 3 : 4);
+            const columns = Array.from({length: colCount}, () => { const col = document.createElement('div'); col.className = 'grid-column'; grid.appendChild(col); return col; });
             const openStores = []; const closedStores = [];
             filtered.forEach(s => { const status = s[displayDate] || '未提供'; if (status === '休' || status === '休息') closedStores.push(s); else openStores.push(s); });
             const finalDisplay = shuffleArray(openStores).concat(shuffleArray(closedStores));
-
-            const width = window.innerWidth;
-            let colCount = width <= 600 ? 2 : (width <= 1200 ? 3 : 4);
-            const columns = Array.from({length: colCount}, () => {
-                const col = document.createElement('div'); col.className = 'grid-column'; grid.appendChild(col); return col;
-            });
             finalDisplay.forEach((s, idx) => columns[idx % colCount].appendChild(createCard(s, displayDate)));
             lucide.createIcons();
         }
-
         function createCard(s, displayDate) {
             const card = document.createElement('div'); const status = s[displayDate] || '未提供'; const isClosed = status === '休' || status === '休息';
             card.className = `store-card ${isClosed ? 'is-closed' : ''}`;
             const dates = ['02/14','02/15','02/16','02/17','02/18','02/19','02/20','02/21','02/22'];
             const labels = {'02/15':'小年夜','02/16':'除夕','02/17':'初一','02/18':'初二','02/19':'初三','02/20':'初四','02/21':'初五'};
             let scheduleHTML = '<div class="store-schedule">';
-            dates.forEach(d => { const dStatus = s[d] || '未提供'; scheduleHTML += `<div class="schedule-item ${dStatus.includes('休') ? 'closed' : ''}"><span>${d}${labels[d] ? ' '+labels[d] : ''}</span><span>${dStatus}</span></div>`; });
+            dates.forEach(d => { const dStatus = s[d] || '未提供'; scheduleHTML += `<div class="schedule-item"><span>${d}${labels[d] ? ' '+labels[d] : ''}</span><span>${dStatus}</span></div>`; });
             scheduleHTML += '</div>';
-
             const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('基隆市七堵區' + s['地址'])}`;
             const lineIcon = `<svg viewBox="0 0 24 24"><path d="M24 10.304c0-4.58-4.644-8.304-10.36-8.304C7.92 2 3.276 5.724 3.276 10.304c0 4.108 3.7 7.525 8.703 8.163.339.073.799.223.916.51.105.257.069.658.034.918l-.151 1.054c-.046.332-.224 1.298 1.042.708 1.266-.59 6.836-4.026 9.327-6.892 1.638-1.782 1.861-3.328 1.861-4.46zM8.406 13.931H6.463a.47.47 0 0 1-.47-.47V7.61a.47.47 0 0 1 .47-.47h1.943a.47.47 0 0 1 .47.47v.433a.47.47 0 0 1-.47.47H7.461v3.473h.945a.47.47 0 0 1 .47.47v.433a.47.47 0 0 1-.47.47zm2.592 0h-1.041a.47.47 0 0 1-.47-.47V7.61a.47.47 0 0 1 .47-.47h1.041a.47.47 0 0 1 .47.47v5.851a.47.47 0 0 1-.47.47zm5.228 0h-1.155l-2.001-3.414v2.944a.47.47 0 0 1-.47.47h-1.04a.47.47 0 0 1-.47-.47V7.61a.47.47 0 0 1 .47-.47h1.154l2.002 3.414V7.61a.47.47 0 0 1 .47-.47h1.041a.47.47 0 0 1 .47.47v5.851a.47.47 0 0 1-.47.47zm4.242-2.147a.47.47 0 0 1-.47.47h-1.943v1.204h1.943a.47.47 0 0 1 .47.47v.433a.47.47 0 0 1-.47.47h-3.453a.47.47 0 0 1-.47-.47V7.61a.47.47 0 0 1 .47-.47h3.453a.47.47 0 0 1 .47.47v.433a.47.47 0 0 1-.47.47h-1.943v1.171h1.943a.47.47 0 0 1 .47.47v.433z"/></svg>`;
-
-            card.innerHTML = `
-                <div class="store-header"><div class="store-name">${s['店名']}</div><div class="category-text">${s['分類']}</div></div>
-                <div class="contact-info">
-                    ${s['地址'] ? `<a href="${mapUrl}" target="_blank" class="contact-item"><i data-lucide="map-pin"></i>${s['地址']}</a>` : ''}
-                    ${s['電話'] ? `<a href="tel:${s['電話']}" class="contact-item"><i data-lucide="phone"></i>${s['電話']}</a>` : ''}
-                </div>
-                ${!isClosed ? `<div class="status-text"><i data-lucide="clock"></i>${displayDate} ${status}</div>` : ''}
-                ${s['備註'] ? `<div class="remark-box">${s['備註']}</div>` : ''}
-                
-                <div class="store-details-wrapper">
-                    <div class="store-details-inner">${scheduleHTML}</div>
-                </div>
-
-                <div class="social-links">
-                    ${s['線上訂餐'] ? `<a href="${s['線上訂餐']}" target="_blank" class="social-btn shop"><i data-lucide="shopping-bag"></i></a>` : ''}
-                    ${(s['粉專'] || s['Facebook']) ? `<a href="${s['粉專'] || s['Facebook']}" target="_blank" class="social-btn fb"><i data-lucide="facebook"></i></a>` : ''}
-                    ${s['IG'] || s['Instagram'] ? `<a href="${s['IG'] || s['Instagram']}" target="_blank" class="social-btn"><i data-lucide="instagram"></i></a>` : ''}
-                    ${s['LINE'] ? `<a href="${s['LINE']}" target="_blank" class="social-btn line">${lineIcon}</a>` : ''}
-                    ${s['官網'] ? `<a href="${s['官網']}" target="_blank" class="social-btn web"><i data-lucide="globe"></i></a>` : ''}
-                </div>
-                <button class="toggle-btn"><span>${isClosed ? '查看營業時段' : '更多時段'}</span><i data-lucide="chevron-down"></i></button>`;
-
-            const btn = card.querySelector('.toggle-btn'); 
-            const wrapper = card.querySelector('.store-details-wrapper');
-            btn.onclick = () => {
-                const isOpen = wrapper.classList.toggle('open');
-                btn.innerHTML = isOpen ? `<span>收合時段</span><i data-lucide="chevron-up"></i>` : `<span>${isClosed ? '查看營業時段' : '更多時段'}</span><i data-lucide="chevron-down"></i>`;
-                lucide.createIcons();
-            };
+            card.innerHTML = `<div class="store-header"><div class="store-name">${s['店名']}</div><div class="category-text">${s['分類']}</div></div><div class="contact-info">${s['地址'] ? `<a href="${mapUrl}" target="_blank" class="contact-item"><i data-lucide="map-pin"></i>${s['地址']}</a>` : ''}${s['電話'] ? `<a href="tel:${s['電話']}" class="contact-item"><i data-lucide="phone"></i>${s['電話']}</a>` : ''}</div>${!isClosed ? `<div class="status-text"><i data-lucide="clock"></i>${displayDate} ${status}</div>` : ''}${s['備註'] ? `<div class="remark-box">${s['備註']}</div>` : ''}<div class="store-details">${scheduleHTML}</div><div class="social-links">${s['線上訂餐'] ? `<a href="${s['線上訂餐']}" target="_blank" class="social-btn shop"><i data-lucide="shopping-bag"></i></a>` : ''}${(s['粉專'] || s['Facebook']) ? `<a href="${s['粉專'] || s['Facebook']}" target="_blank" class="social-btn fb"><i data-lucide="facebook"></i></a>` : ''}${s['IG'] || s['Instagram'] ? `<a href="${s['IG'] || s['Instagram']}" target="_blank" class="social-btn"><i data-lucide="instagram"></i></a>` : ''}${s['LINE'] ? `<a href="${s['LINE']}" target="_blank" class="social-btn line">${lineIcon}</a>` : ''}${s['官網'] ? `<a href="${s['官網']}" target="_blank" class="social-btn web"><i data-lucide="globe"></i></a>` : ''}</div><button class="toggle-btn"><span>${isClosed ? '查看營業時段' : '更多時段'}</span><i data-lucide="chevron-down"></i></button>`;
+            const btn = card.querySelector('.toggle-btn'); const details = card.querySelector('.store-details');
+            btn.onclick = () => { const isHidden = details.style.display === 'none' || details.style.display === ''; details.style.display = isHidden ? 'block' : 'none'; btn.innerHTML = isHidden ? `<span>收合時段</span><i data-lucide="chevron-up"></i>` : `<span>${isClosed ? '查看營業時段' : '更多時段'}</span><i data-lucide="chevron-down"></i>`; lucide.createIcons(); };
             return card;
         }
-
-        function setupSearch() {
-            const btn = document.getElementById('searchBtn'); const bar = document.getElementById('searchBar'); const input = document.getElementById('searchInput'); const closeBtn = document.getElementById('searchCloseBtn');
-            btn.onclick = () => { bar.classList.add('active'); input.focus(); };
-            closeBtn.onclick = () => { input.value = ''; render(); bar.classList.remove('active'); };
-            input.oninput = render; lucide.createIcons();
-        }
-
+        function setupSearch() { const btn = document.getElementById('searchBtn'); const bar = document.getElementById('searchBar'); const input = document.getElementById('searchInput'); const closeBtn = document.getElementById('searchCloseBtn'); btn.onclick = () => { bar.classList.add('active'); input.focus(); }; closeBtn.onclick = () => { input.value = ''; render(); bar.classList.remove('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }; input.oninput = render; lucide.createIcons(); }
         window.onresize = render; init();
     </script>
 </body>
