@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>正在導向中...</title>
+    <script type="text/javascript">
+        // 取得目前的網址路徑
+        var path = window.location.pathname;
+
+        // 檢查是否包含小寫的 "2026lny"
+        if (path.includes("/2026lny/")) {
+            // 將小寫替換成大寫並跳轉
+            var newPath = path.replace("/2026lny/", "/2026LNY/");
+            window.location.replace(newPath);
+        } else {
+            // 如果不是因為大小寫問題，就顯示找不到頁面的訊息
+            document.write("<h1>404 - 找不到頁面</h1>");
+            document.write("<p>請聯繫<a href='https://www.facebook.com/ilovecidu'>我是七堵人</a>。</p>");
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
