@@ -25,7 +25,7 @@
             --accent-purple-border: rgba(182, 146, 208, 0.3);
             --soft-gradient: linear-gradient(90deg, #ffcad4, #fde2e4, #fad2e1, #bee1e6);
             --border-color: #f0ebf5;
-            --shadow: 0 10px 30px rgba(182, 146, 208, 0.12); /* 增強陰影來取代邊框 */
+            --shadow: 0 10px 30px rgba(182, 146, 208, 0.12);
             --accent-line: #06C755;
             --accent-fb: #1877F2; 
             --accent-ig: #E4405F;
@@ -38,13 +38,24 @@
         .page-wrapper { width: 100%; position: relative; }
         .festive-top-bar { height: 4px; background: var(--soft-gradient); width: 100%; }
 
-        header { padding: 55px 15px 35px; text-align: center; }
+        /* 標題區：修正小螢幕換行問題 */
+        header { padding: 50px 10px 30px; text-align: center; }
         .year-tag { font-size: 0.7rem; color: var(--accent-main); letter-spacing: 3px; margin-bottom: 8px; font-weight: 500; opacity: 0.8; }
-        h1 { font-family: 'Noto Serif TC', serif; font-size: 1.9rem; letter-spacing: 4px; background: linear-gradient(to right, var(--accent-main), #b692d0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        h1 { 
+            font-family: 'Noto Serif TC', serif; 
+            font-size: 1.8rem; letter-spacing: 3px; 
+            background: linear-gradient(to right, var(--accent-main), #b692d0); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            font-weight: 700;
+            white-space: nowrap; /* 強制不換行 */
+        }
+        @media (max-width: 375px) {
+            h1 { font-size: 1.55rem; letter-spacing: 1px; }
+            header { padding: 45px 5px 25px; }
+        }
 
         .sticky-nav { position: sticky; top: 0; background: transparent; transition: all 0.3s ease-in-out; z-index: 1000; padding: 12px 0 0; }
         .sticky-nav.is-stuck { background: rgba(255, 252, 248, 0.96); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(231, 84, 128, 0.1); }
-        
         .nav-container { max-width: 1400px; margin: 0 auto; }
         .nav-top-row { display: flex; align-items: center; padding: 0 15px 8px; gap: 10px; }
         .filter-buttons { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; flex-grow: 1; -webkit-overflow-scrolling: touch; }
@@ -52,7 +63,6 @@
         
         .filter-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--accent-purple-border); background: transparent; color: var(--text-main) !important; white-space: nowrap; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
         .filter-btn.active { background: var(--accent-main); color: white !important; border-color: var(--accent-main); }
-        
         .search-icon-btn { flex-shrink: 0; width: 32px; height: 32px; background: rgba(255, 255, 255, 0.5); border: 1px solid var(--accent-main); border-radius: 50%; color: var(--accent-main); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
         .search-icon-btn svg { width: 14px !important; height: 14px !important; stroke-width: 1.8 !important; }
 
@@ -66,16 +76,16 @@
         .search-bar input { flex: 1; border: none; outline: none; font-size: 1.1rem; margin: 0 12px; background: transparent; }
         .search-clear-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ccc; flex-shrink: 0; }
 
-        .main-content { padding: 25px 15px; max-width: 1400px; margin: 0 auto; min-height: 60vh; }
+        .main-content { padding: 20px 15px; max-width: 1400px; margin: 0 auto; min-height: 60vh; }
         .stores-grid { display: flex; gap: 15px; width: 100%; align-items: flex-start; }
         .grid-column { flex: 1; display: flex; flex-direction: column; gap: 15px; min-width: 0; }
 
-        /* 店家卡片：移除邊框 */
+        /* 卡片設計：修正內間距讓時間空間更大 */
         .store-card { 
             background: rgba(255, 255, 255, 0.92); 
             border-radius: 12px; 
-            padding: 22px 18px 18px; 
-            border: none; /* 卡片無白邊 */
+            padding: 22px 14px 18px; /* 左右從 18px 改為 14px */
+            border: none; 
             box-shadow: var(--shadow); 
             width: 100%; position: relative; 
             backdrop-filter: blur(5px); 
@@ -83,31 +93,32 @@
             overflow: hidden;
         }
         .store-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--soft-gradient); }
-
         .store-card.is-closed { filter: grayscale(1); opacity: 0.5; }
-        .store-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 12px; }
-        .store-name { font-family: 'Noto Serif TC', serif; font-size: 1.1rem; color: #333; flex: 1; line-height: 1.3; font-weight: 700; }
+
+        .store-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; }
+        .store-name { font-family: 'Noto Serif TC', serif; font-size: 1.05rem; color: #333; flex: 1; line-height: 1.3; font-weight: 700; }
         .category-text { font-size: 0.72rem; color: var(--accent-purple); flex-shrink: 0; font-weight: 500; }
         
-        .contact-info { margin-bottom: 6px; }
-        .contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-sub) !important; text-decoration: none; line-height: 2.2; }
-        .contact-item svg, .status-text svg { width: 14px !important; height: 14px !important; stroke-width: 1.5 !important; flex-shrink: 0; }
+        .contact-info { margin-bottom: 8px; }
+        .contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-sub) !important; text-decoration: none; line-height: 1.8; margin-bottom: 4px; }
+        .contact-item svg, .status-text svg { width: 13px !important; height: 13px !important; stroke-width: 1.5 !important; flex-shrink: 0; }
         .contact-item svg { color: #ccc; }
         
-        .status-text { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; margin-bottom: 12px; color: var(--accent-main); }
-        .remark-box { border-left: 3px solid var(--accent-main); padding: 4px 0 4px 12px; margin-bottom: 15px; font-size: 0.82rem; color: #8d5b6b; line-height: 1.6; background: linear-gradient(to right, rgba(231, 84, 128, 0.05), transparent); }
+        .status-text { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 500; margin-bottom: 12px; color: var(--accent-main); }
+        .remark-box { border-left: 3px solid var(--accent-main); padding: 4px 0 4px 10px; margin-bottom: 15px; font-size: 0.78rem; color: #8d5b6b; line-height: 1.5; background: linear-gradient(to right, rgba(231, 84, 128, 0.05), transparent); }
 
         .store-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, opacity 0.3s ease; }
         .store-details.open { max-height: 700px; opacity: 1; margin-bottom: 15px; margin-top: 8px; }
         .store-schedule { border: 1px solid #f6f3f8; border-radius: 8px; overflow: hidden; }
-        .schedule-item { display: flex; justify-content: space-between; font-size: 0.72rem; padding: 9px 12px; color: #666; background: #ffffff; }
+        .schedule-item { display: flex; justify-content: space-between; font-size: 0.72rem; padding: 10px 10px; color: #666; background: #ffffff; gap: 5px; }
+        .schedule-item span:first-child { white-space: nowrap; flex-shrink: 0; }
+        .schedule-item span:last-child { text-align: right; word-break: break-all; }
         .schedule-item:nth-child(even) { background: #faf9fb; }
 
         .social-links { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; justify-content: center; }
         .social-btn { background: rgba(255,255,255,0.5); color: var(--text-sub); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; border: 1px solid #f0ebf2; }
-        .social-btn svg { width: 18px !important; height: 18px !important; stroke-width: 1.5 !important; }
+        .social-btn svg { width: 17px !important; height: 17px !important; stroke-width: 1.5 !important; }
 
-        /* Hover：邊框同步背景色 */
         .social-btn.fb:hover { background: var(--accent-fb); border-color: var(--accent-fb); color: white !important; }
         .social-btn.ig:hover { background: var(--accent-ig); border-color: var(--accent-ig); color: white !important; }
         .social-btn.line:hover { background: var(--accent-line); border-color: var(--accent-line); color: white !important; }
@@ -117,18 +128,10 @@
         .social-btn.cart:hover { background: var(--accent-cart); border-color: var(--accent-cart); color: white !important; }
         .social-btn.web:hover { background: var(--accent-web); border-color: var(--accent-web); color: white !important; }
 
-        /* 修正：縮減按鈕高度 */
-        .toggle-btn { 
-            width: 100%; 
-            padding: 8px; /* 從 12px 縮減至 8px */
-            background: rgba(255,255,255,0.6); border: 1px solid var(--border-color); 
-            border-radius: 8px; color: var(--accent-main); 
-            font-size: 0.75rem; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; 
-        }
+        .toggle-btn { width: 100%; padding: 8px; background: rgba(255,255,255,0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--accent-main); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; }
 
         .footer { background: transparent; text-align: center; padding: 60px 15px; width: 100%; border-top: 1px solid rgba(182, 146, 208, 0.1); }
-        .footer p { font-size: 0.85rem !important; margin: 0; line-height: 2.2; color: #777; }
+        .footer p { font-size: 0.82rem !important; margin: 0; line-height: 2.2; color: #777; }
         .footer a { color: var(--accent-main); text-decoration: none; font-weight: 700; }
     </style>
 </head>
@@ -157,11 +160,15 @@
             </div>
         </div>
 
-        <div class="main-content"><div id="loading" style="text-align:center; padding: 100px; color: var(--accent-main);">美好時光載入中...</div><div class="stores-grid" id="storesGrid"></div></div>
-        <div class="footer"><p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作維護</p><p>如須新增或修改店家資訊，請私訊粉專，新年快樂</p></div>
+        <div class="main-content"><div id="loading" style="text-align:center; padding: 100px; color: var(--accent-main);">載入美好時光...</div><div class="stores-grid" id="storesGrid"></div></div>
+        <div class="footer"><p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作維護</p><p>如須新增修改店家資訊，請私訊粉專聯繫</p></div>
     </div>
 
-    <div class="search-bar" id="searchBar"><i data-lucide="search"></i><input type="text" id="searchInput" placeholder="搜尋店家名稱..."><div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div></div>
+    <div class="search-bar" id="searchBar">
+        <i data-lucide="search"></i>
+        <input type="text" id="searchInput" placeholder="搜尋店家名稱...">
+        <div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div>
+    </div>
 
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
@@ -212,7 +219,11 @@
             const filtered = storesData.filter(s => (currentCategory === 'ALL' || s['分類'] === currentCategory) && s['店名'].toLowerCase().includes(keyword));
             
             if (filtered.length === 0) { 
-                grid.innerHTML = `<div style="text-align:center; padding: 80px 20px; color:#ccc; width:100%;"><i data-lucide="search-x" style="width:48px;height:48px;margin-bottom:15px;opacity:0.5;"></i><p>找不到相符的店家</p></div>`; 
+                grid.innerHTML = `
+                <div style="text-align:center; padding: 80px 20px; color:#ccc; width:100%;">
+                    <i data-lucide="search-x" style="width:48px;height:48px;margin-bottom:15px;opacity:0.5;"></i>
+                    <p style="font-size:1rem; color:var(--text-sub);">找不到相符的店家</p>
+                </div>`; 
                 lucide.createIcons(); return; 
             }
             
