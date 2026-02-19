@@ -38,7 +38,6 @@
         .page-wrapper { width: 100%; position: relative; }
         .festive-top-bar { height: 4px; background: var(--soft-gradient); width: 100%; }
 
-        /* 標題區：修正小螢幕換行問題 */
         header { padding: 50px 10px 30px; text-align: center; }
         .year-tag { font-size: 0.7rem; color: var(--accent-main); letter-spacing: 3px; margin-bottom: 8px; font-weight: 500; opacity: 0.8; }
         h1 { 
@@ -47,7 +46,7 @@
             background: linear-gradient(to right, var(--accent-main), #b692d0); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             font-weight: 700;
-            white-space: nowrap; /* 強制不換行 */
+            white-space: nowrap;
         }
         @media (max-width: 375px) {
             h1 { font-size: 1.55rem; letter-spacing: 1px; }
@@ -80,11 +79,10 @@
         .stores-grid { display: flex; gap: 15px; width: 100%; align-items: flex-start; }
         .grid-column { flex: 1; display: flex; flex-direction: column; gap: 15px; min-width: 0; }
 
-        /* 卡片設計：修正內間距讓時間空間更大 */
         .store-card { 
             background: rgba(255, 255, 255, 0.92); 
             border-radius: 12px; 
-            padding: 22px 14px 18px; /* 左右從 18px 改為 14px */
+            padding: 22px 14px 18px; 
             border: none; 
             box-shadow: var(--shadow); 
             width: 100%; position: relative; 
@@ -164,11 +162,7 @@
         <div class="footer"><p>本頁面由 <a href="https://www.facebook.com/ilovecidu" target="_blank">我是七堵人</a> 製作維護</p><p>如須新增修改店家資訊，請私訊粉專聯繫</p></div>
     </div>
 
-    <div class="search-bar" id="searchBar">
-        <i data-lucide="search"></i>
-        <input type="text" id="searchInput" placeholder="搜尋店家名稱...">
-        <div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div>
-    </div>
+    <div class="search-bar" id="searchBar"><i data-lucide="search"></i><input type="text" id="searchInput" placeholder="搜尋店家名稱..."><div class="search-clear-btn" id="searchCloseBtn"><i data-lucide="x"></i></div></div>
 
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
@@ -202,6 +196,7 @@
             });
         }
 
+        /* 修正：自動捲動選取日期至畫面中心 */
         function initDateTabs() {
             const dates = [{ id: 'ALL', label: '全' }, { id: '02/14', label: '02/14' }, { id: '02/15', label: '02/15 小年' }, { id: '02/16', label: '02/16 除夕' }, { id: '02/17', label: '02/17 初一' }, { id: '02/18', label: '02/18 初二' }, { id: '02/19', label: '02/19 初三' }, { id: '02/20', label: '02/20 初四' }, { id: '02/21', label: '02/21 初五' }, { id: '02/22', label: '02/22' }];
             const container = document.getElementById('dateTabs');
@@ -209,6 +204,13 @@
                 const el = document.createElement('div'); el.className = 'date-tab' + (d.id === currentDate ? ' active' : ''); el.textContent = d.label;
                 el.onclick = () => { currentDate = d.id; document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
                 container.appendChild(el);
+                
+                // 核心邏輯：如果該標籤是當天，則自動捲動它到視線內
+                if (d.id === currentDate) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }, 300); // 延遲 300ms 確保 DOM 已渲染完成
+                }
             });
         }
 
@@ -219,11 +221,7 @@
             const filtered = storesData.filter(s => (currentCategory === 'ALL' || s['分類'] === currentCategory) && s['店名'].toLowerCase().includes(keyword));
             
             if (filtered.length === 0) { 
-                grid.innerHTML = `
-                <div style="text-align:center; padding: 80px 20px; color:#ccc; width:100%;">
-                    <i data-lucide="search-x" style="width:48px;height:48px;margin-bottom:15px;opacity:0.5;"></i>
-                    <p style="font-size:1rem; color:var(--text-sub);">找不到相符的店家</p>
-                </div>`; 
+                grid.innerHTML = `<div style="text-align:center; padding: 80px 20px; color:#ccc; width:100%;"><i data-lucide="search-x" style="width:48px;height:48px;margin-bottom:15px;opacity:0.5;"></i><p>找不到相符的店家</p></div>`; 
                 lucide.createIcons(); return; 
             }
             
