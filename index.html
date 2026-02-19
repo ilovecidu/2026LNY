@@ -100,7 +100,6 @@
         .contact-info { margin-bottom: 8px; }
         .contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-sub) !important; text-decoration: none; line-height: 1.8; margin-bottom: 4px; }
         .contact-item svg, .status-text svg { width: 13px !important; height: 13px !important; stroke-width: 1.5 !important; flex-shrink: 0; }
-        .contact-item svg { color: #ccc; }
         
         .status-text { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 500; margin-bottom: 12px; color: var(--accent-main); }
         .remark-box { border-left: 3px solid var(--accent-main); padding: 4px 0 4px 10px; margin-bottom: 15px; font-size: 0.78rem; color: #8d5b6b; line-height: 1.5; background: linear-gradient(to right, rgba(231, 84, 128, 0.05), transparent); }
@@ -109,9 +108,6 @@
         .store-details.open { max-height: 700px; opacity: 1; margin-bottom: 15px; margin-top: 8px; }
         .store-schedule { border: 1px solid #f6f3f8; border-radius: 8px; overflow: hidden; }
         .schedule-item { display: flex; justify-content: space-between; font-size: 0.72rem; padding: 10px 10px; color: #666; background: #ffffff; gap: 5px; }
-        .schedule-item span:first-child { white-space: nowrap; flex-shrink: 0; }
-        .schedule-item span:last-child { text-align: right; word-break: break-all; }
-        .schedule-item:nth-child(even) { background: #faf9fb; }
 
         .social-links { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; justify-content: center; }
         .social-btn { background: rgba(255,255,255,0.5); color: var(--text-sub); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; border: 1px solid #f0ebf2; }
@@ -168,11 +164,23 @@
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSALQr5PXgc-3gU02FJf5Prvc0KNg7pEkVRtFbmWVMr972zor9hmyUWFCm0Z4ziFhtHMV-u1gih99Cq/pub?gid=0&single=true&output=csv';
         let storesData = []; let currentCategory = 'ALL'; let currentDate = 'ALL';
 
+        // 修正：類別英中對照表
+        const catMap = { '吃': 'eat', '喝': 'drink', '玩': 'play', '醫': 'med', '其': 'other', 'ALL': 'all' };
+        const revCatMap = { 'eat': '吃', 'drink': '喝', 'play': '玩', 'med': '醫', 'other': '其', 'all': 'ALL' };
+
         const nav = document.getElementById('stickyNav');
         window.addEventListener('scroll', () => { if (window.scrollY > 150) nav.classList.add('is-stuck'); else nav.classList.remove('is-stuck'); });
 
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
         
+        function updateURL() {
+            const url = new URL(window.location);
+            // 轉換為英文代碼存入網址
+            url.searchParams.set('c', catMap[currentCategory] || 'all');
+            url.searchParams.set('d', currentDate.replace('/', '')); 
+            window.history.replaceState({}, '', url);
+        }
+
         async function init() {
             try {
                 const res = await fetch(CSV_URL); const csv = await res.text();
@@ -180,9 +188,32 @@
                 const headers = rows[0];
                 storesData = rows.slice(1).map(r => { let obj = {}; headers.forEach((h, i) => obj[headers[i]] = r[i] || ''); return obj; }).filter(s => s['店名']);
                 storesData = shuffleArray(storesData);
-                const today = new Date(); const todayStr = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
-                currentDate = ['02/14','02/15','02/16','02/17','02/18','02/19','02/20','02/21','02/22'].includes(todayStr) ? todayStr : '02/16'; 
+
+                const params = new URLSearchParams(window.location.search);
+                // 讀取英文代碼並轉回中文分類
+                if (params.has('c')) {
+                    const cVal = params.get('c').toLowerCase();
+                    currentCategory = revCatMap[cVal] || 'ALL';
+                }
+                
+                const today = new Date(); 
+                const todayStr = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+                
+                if (params.has('d')) {
+                    const dVal = params.get('d');
+                    if(dVal.length === 4) currentDate = dVal.slice(0, 2) + '/' + dVal.slice(2);
+                    else currentDate = dVal;
+                } else {
+                    currentDate = ['02/14','02/15','02/16','02/17','02/18','02/19','02/20','02/21','02/22'].includes(todayStr) ? todayStr : '02/16'; 
+                }
+
                 initDateTabs(); setupFilters(); setupSearch(); render();
+                
+                // 根據載入的類別更新按鈕狀態
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.category === currentCategory);
+                });
+
                 document.getElementById('loading').style.display = 'none';
             } catch (e) { console.error(e); }
         }
@@ -191,25 +222,35 @@
             document.getElementById('filterButtons').addEventListener('click', (e) => {
                 if (e.target.classList.contains('filter-btn')) {
                     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active'); currentCategory = e.target.dataset.category; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+                    e.target.classList.add('active'); 
+                    currentCategory = e.target.dataset.category; 
+                    updateURL(); 
+                    render(); 
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
 
-        /* 修正：自動捲動選取日期至畫面中心 */
         function initDateTabs() {
             const dates = [{ id: 'ALL', label: '全' }, { id: '02/14', label: '02/14' }, { id: '02/15', label: '02/15 小年' }, { id: '02/16', label: '02/16 除夕' }, { id: '02/17', label: '02/17 初一' }, { id: '02/18', label: '02/18 初二' }, { id: '02/19', label: '02/19 初三' }, { id: '02/20', label: '02/20 初四' }, { id: '02/21', label: '02/21 初五' }, { id: '02/22', label: '02/22' }];
             const container = document.getElementById('dateTabs');
+            container.innerHTML = '';
             dates.forEach(d => {
                 const el = document.createElement('div'); el.className = 'date-tab' + (d.id === currentDate ? ' active' : ''); el.textContent = d.label;
-                el.onclick = () => { currentDate = d.id; document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                el.onclick = () => { 
+                    currentDate = d.id; 
+                    document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active')); 
+                    el.classList.add('active'); 
+                    updateURL(); 
+                    render(); 
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                };
                 container.appendChild(el);
                 
-                // 核心邏輯：如果該標籤是當天，則自動捲動它到視線內
                 if (d.id === currentDate) {
                     setTimeout(() => {
                         el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                    }, 300); // 延遲 300ms 確保 DOM 已渲染完成
+                    }, 400); 
                 }
             });
         }
